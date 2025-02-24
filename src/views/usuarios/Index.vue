@@ -1,5 +1,5 @@
 <template>
-    <div class="container mt-4">
+    <div class="container-fluid mt-4 d-flex flex-column flex-grow-1">
         <!-- Barra superior (Botón y buscador) -->
         <div class="row align-items-center mb-3">
             <div class="col-md-6 mb-2 mb-md-0">
@@ -10,20 +10,14 @@
             <div class="col-md-6">
                 <div class="input-group">
                     <span class="input-group-text"><i class="fa-solid fa-search"></i></span>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        v-model="criterioBusqueda" 
-                        placeholder="Buscar por carnet..." 
-                        @input="buscarUsuarios"
-                    />
+                    <input type="text" class="form-control" v-model="criterioBusqueda" placeholder="Buscar por carnet..." @input="buscarUsuarios"/>
                     <button class="btn btn-outline-success" type="button" @click="buscarUsuarios">Buscar</button>
                 </div>
             </div>
         </div>
 
         <!-- Tabla de usuarios -->
-        <div class="row mt-3">
+        <div class="row flex-grow-1 overflow-auto">
             <div class="col-12">
                 <div v-if="!cargando" class="card border border-white text-center">
                     <div class="card-body">
@@ -31,7 +25,7 @@
                     </div>
                 </div>
 
-                <div v-else class="table-responsive">
+                <div v-else class="table-responsive flex-grow-1">
                     <table class="table table-bordered table-hover table-striped">
                         <thead class="table-dark">
                             <tr>

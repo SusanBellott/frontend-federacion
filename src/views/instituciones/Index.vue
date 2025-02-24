@@ -1,5 +1,5 @@
 <template>
-    <div class="container mt-4">
+    <div class="container-fluid mt-4 d-flex flex-column flex-grow-1">
         <!-- Barra superior (Botón y buscador) -->
         <div class="row align-items-center mb-3">
             <div class="col-md-6 mb-2 mb-md-0">
@@ -21,81 +21,85 @@
                 </div>
             </div>
         </div>
+
         <!-- Mensaje de carga -->
-        <div v-if="cargando" class="text-center">
+        <div v-if="cargando" class="text-center flex-grow-1 d-flex align-items-center justify-content-center">
             <p>Cargando instituciones...</p>
         </div>
 
         <!-- Tabla de instituciones -->
-        <div v-else>
-            <div v-if="instituciones.length" class="table-responsive">
-                <table class="table table-bordered table-hover table-striped">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>RDA</th>
-                            <th>Código Distrito</th>
-                            <th>Descripción Distrito</th>
-                            <th>Subsistema</th>
-                            <th>Servicio</th>
-                            <th>Años de Servicio</th>
-                            <th>Nivel</th>
-                            <th>Programa</th>
-                            <th>Nombre Institución</th>
-                            <th>Item</th>
-                            <th>Cargo</th>
-                            <th>Horas</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(institucion, index) in instituciones" :key="institucion.id">
-                            <td>{{ (index + 1) + (pagina - 1) * perPage }}</td>
-                            <td>{{ institucion.rda }}</td>
-                            <td>{{ institucion.codigo_distrito }}</td>
-                            <td>{{ institucion.descripcion_distrito }}</td>
-                            <td>{{ institucion.subsistema }}</td>
-                            <td>{{ institucion.servicio }}</td>
-                            <td>{{ institucion.años_servicio }}</td>
-                            <td>{{ institucion.nivel }}</td>
-                            <td>{{ institucion.programa }}</td>
-                            <td>{{ institucion.nombre_institucion }}</td>
-                            <td>{{ institucion.item }}</td>
-                            <td>{{ institucion.cargo }}</td>
-                            <td>{{ institucion.horas }}</td>
-                            <td class="acciones">
-                                <router-link 
-                                    :to="{ name: 'instituciones-edit', params: { id: institucion.id } }" 
-                                    class="btn btn-warning me-2">
-                                    <i class="fa-solid fa-edit"></i>
-                                </router-link>
-                                <button class="btn btn-danger" @click="eliminarInstitucion(institucion.id)">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p v-else>No hay instituciones registradas.</p>
+        <div v-else class="row flex-grow-1 overflow-auto">
+            <div class="col-12">
+                <div v-if="instituciones.length" class="table-responsive flex-grow-1">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>RDA</th>
+                                <th>Código Distrito</th>
+                                <th>Descripción Distrito</th>
+                                <th>Subsistema</th>
+                                <th>Servicio</th>
+                                <th>Años de Servicio</th>
+                                <th>Nivel</th>
+                                <th>Programa</th>
+                                <th>Nombre Institución</th>
+                                <th>Item</th>
+                                <th>Cargo</th>
+                                <th>Horas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(institucion, index) in instituciones" :key="institucion.id">
+                                <td>{{ (index + 1) + (pagina - 1) * perPage }}</td>
+                                <td>{{ institucion.rda }}</td>
+                                <td>{{ institucion.codigo_distrito }}</td>
+                                <td>{{ institucion.descripcion_distrito }}</td>
+                                <td>{{ institucion.subsistema }}</td>
+                                <td>{{ institucion.servicio }}</td>
+                                <td>{{ institucion.años_servicio }}</td>
+                                <td>{{ institucion.nivel }}</td>
+                                <td>{{ institucion.programa }}</td>
+                                <td>{{ institucion.nombre_institucion }}</td>
+                                <td>{{ institucion.item }}</td>
+                                <td>{{ institucion.cargo }}</td>
+                                <td>{{ institucion.horas }}</td>
+                                <td class="acciones">
+                                    <router-link 
+                                        :to="{ name: 'instituciones-edit', params: { id: institucion.id } }" 
+                                        class="btn btn-warning me-2">
+                                        <i class="fa-solid fa-edit"></i>
+                                    </router-link>
+                                    <button class="btn btn-danger" @click="eliminarInstitucion(institucion.id)">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p v-else>No hay instituciones registradas.</p>
 
-            <!-- Paginación -->
-             <nav>
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item" :class="{ disabled: !paginacion.prev }">
-                                <button class="page-link" @click="cambiarPagina(pagina - 1)">Anterior</button>
-                            </li>
-                            <li class="page-item" v-for="p in paginacion.last_page" :key="p" :class="{ active: p === pagina }">
-                                <button class="page-link" @click="cambiarPagina(p)">{{ p }}</button>
-                            </li>
-                            <li class="page-item" :class="{ disabled: !paginacion.next }">
-                                <button class="page-link" @click="cambiarPagina(pagina + 1)">Siguiente</button>
-                            </li>
-                        </ul>
-                    </nav>
+                <!-- Paginación -->
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" :class="{ disabled: !paginacion.prev }">
+                            <button class="page-link" @click="cambiarPagina(pagina - 1)">Anterior</button>
+                        </li>
+                        <li class="page-item" v-for="p in paginacion.last_page" :key="p" :class="{ active: p === pagina }">
+                            <button class="page-link" @click="cambiarPagina(p)">{{ p }}</button>
+                        </li>
+                        <li class="page-item" :class="{ disabled: !paginacion.next }">
+                            <button class="page-link" @click="cambiarPagina(pagina + 1)">Siguiente</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 </template>
+
 
 <script setup>
 import axios from 'axios';
